@@ -12,7 +12,8 @@ class ProductDetailScreen extends StatelessWidget {
     // and use id to get product data in states
     final args =
         ModalRoute.of(context)!.settings.arguments as ProductDetailArgs;
-    final product = Provider.of<Products>(context).getSingleProduct(args.id);
+    final product =
+        Provider.of<Products>(context, listen: false).getSingleProduct(args.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(product.title),
