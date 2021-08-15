@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/products.dart';
 import '../types/page_args.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -10,12 +12,15 @@ class ProductDetailScreen extends StatelessWidget {
     // and use id to get product data in states
     final args =
         ModalRoute.of(context)!.settings.arguments as ProductDetailArgs;
+    final product = Provider.of<Products>(context)
+        .items
+        .firstWhere((element) => element.id == args.id);
     return Scaffold(
       appBar: AppBar(
-        title: Text('title'),
+        title: Text(product.title),
       ),
       body: Center(
-        child: Text('title'),
+        child: Text(product.title),
       ),
     );
   }
