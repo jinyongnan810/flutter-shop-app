@@ -12,8 +12,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // its recommend using create instead of value when creating a new object to provide
     return ChangeNotifierProvider(
       create: (ctx) => Products(),
+      // value: Products(),
       child: MaterialApp(
         title: 'Shop App',
         debugShowCheckedModeBanner: false,
