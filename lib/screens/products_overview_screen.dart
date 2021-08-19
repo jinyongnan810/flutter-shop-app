@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/products.dart';
 import '../components/product_grid_view.dart';
 
 enum FilterOptions { ONLY_FAVORITES, SHOW_ALL }
 
-class ProductsOverviewScreen extends StatelessWidget {
+class ProductsOverviewScreen extends StatefulWidget {
+  @override
+  _ProductsOverviewScreenState createState() => _ProductsOverviewScreenState();
+}
+
+class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
+  bool _onlyFavorite = false;
   @override
   Widget build(BuildContext context) {
-    final productsState = Provider.of<Products>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text('MyShop'),
@@ -17,10 +20,14 @@ class ProductsOverviewScreen extends StatelessWidget {
               onSelected: (FilterOptions value) {
                 switch (value) {
                   case FilterOptions.ONLY_FAVORITES:
-                    productsState.switchShowFavorite(true);
+                    setState(() {
+                      _onlyFavorite = true;
+                    });
                     break;
                   case FilterOptions.SHOW_ALL:
-                    productsState.switchShowFavorite(false);
+                    setState(() {
+                      _onlyFavorite = false;
+                    });
                     break;
                   default:
                     return;
@@ -41,7 +48,7 @@ class ProductsOverviewScreen extends StatelessWidget {
       ),
       // so that the appBar doesn't need any state to listen
       // extract the part that do need listen state
-      body: ProductGridView(),
+      body: ProductGridView(_onlyFavorite),
     );
   }
 }

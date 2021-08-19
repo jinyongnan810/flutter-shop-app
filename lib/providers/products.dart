@@ -40,11 +40,12 @@ List<Product> dummyProducts = [
 // while the class with its mixin has no such thing, and the class only uses the mixin for its utility properties
 class Products with ChangeNotifier {
   List<Product> _items = dummyProducts;
-  bool _showOnlyFavorites = false;
   List<Product> get items {
-    return _showOnlyFavorites
-        ? _items.where((e) => e.isFavorite == true).toList()
-        : [..._items];
+    return [..._items];
+  }
+
+  List<Product> get itemsFavorite {
+    return _items.where((element) => element.isFavorite).toList();
   }
 
   // demo of making changes and notify all listeners
@@ -53,11 +54,11 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  // switch show favorites / show all
-  void switchShowFavorite(bool onlyFavorite) {
-    this._showOnlyFavorites = onlyFavorite;
-    notifyListeners();
-  }
+  // // switch show favorites / show all
+  // void switchShowFavorite(bool onlyFavorite) {
+  //   this._showOnlyFavorites = onlyFavorite;
+  //   notifyListeners();
+  // }
 
   Product getSingleProduct(String id) {
     return _items.firstWhere((element) => element.id == id);
