@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/components/badge.dart';
+import 'package:shop/providers/cart.dart';
 import '../components/product_grid_view.dart';
 
 enum FilterOptions { ONLY_FAVORITES, SHOW_ALL }
@@ -43,7 +46,13 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                       child: Text("Show All"),
                       value: FilterOptions.SHOW_ALL,
                     ),
-                  ])
+                  ]),
+          Consumer<Cart>(
+            builder: (_, cart, ch) =>
+                Badge(child: ch!, value: cart.itemCount.toString()),
+            child:
+                IconButton(onPressed: () {}, icon: Icon(Icons.shopping_cart)),
+          ),
         ],
       ),
       // so that the appBar doesn't need any state to listen
