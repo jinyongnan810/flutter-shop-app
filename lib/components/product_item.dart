@@ -10,8 +10,6 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     // listen for product provider
     final product = Provider.of<Product>(context, listen: false);
-    // listen for cart provider
-    final cart = Provider.of<Cart>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -43,15 +41,16 @@ class ProductItem extends StatelessWidget {
               product.title,
               textAlign: TextAlign.center,
             ),
-            trailing: IconButton(
-              icon: Icon(cart.items.containsKey(product.id)
-                  ? Icons.shopping_cart
-                  : Icons.shopping_cart_outlined),
-              onPressed: () {
-                cart.add(product.id, product.title, product.price);
-              },
-              color: Theme.of(context).accentColor,
-            ),
+            trailing: Consumer<Cart>(
+                builder: (_, cart, __) => IconButton(
+                      icon: Icon(cart.items.containsKey(product.id)
+                          ? Icons.shopping_cart
+                          : Icons.shopping_cart_outlined),
+                      onPressed: () {
+                        cart.add(product.id, product.title, product.price);
+                      },
+                      color: Theme.of(context).accentColor,
+                    )),
           )),
     );
   }
