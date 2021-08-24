@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/components/badge.dart';
+import 'package:shop/components/main_drawer.dart';
 import 'package:shop/providers/cart.dart';
 import 'package:shop/screens/cart_screen.dart';
 import '../components/product_grid_view.dart';
@@ -62,6 +63,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       // so that the appBar doesn't need any state to listen
       // extract the part that do need listen state
       body: ProductGridView(_onlyFavorite),
+      drawer: MainDrawer(),
     );
   }
 }
