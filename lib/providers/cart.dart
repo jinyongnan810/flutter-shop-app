@@ -4,11 +4,13 @@ import 'package:flutter/foundation.dart';
 
 class CartItemInfo {
   String id;
+  String productId;
   String title;
   double price;
   int quantity;
   CartItemInfo(
       {required this.id,
+      required this.productId,
       required this.title,
       required this.price,
       required this.quantity});
@@ -19,6 +21,10 @@ class Cart with ChangeNotifier {
 
   Map<String, CartItemInfo> get items {
     return {..._items};
+  }
+
+  List<CartItemInfo> get itemsList {
+    return _items.values.toList();
   }
 
   CartItemInfo? get(id) {
@@ -54,6 +60,7 @@ class Cart with ChangeNotifier {
     } else {
       _items[id] = CartItemInfo(
           id: Random().nextInt(1000000).toString(),
+          productId: id,
           title: title,
           price: price,
           quantity: 1);
@@ -63,6 +70,11 @@ class Cart with ChangeNotifier {
 
   void remove(String id) {
     _items.remove(id);
+    notifyListeners();
+  }
+
+  void clear() {
+    _items = {};
     notifyListeners();
   }
 }
