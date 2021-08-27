@@ -34,6 +34,13 @@ class Cart with ChangeNotifier {
     return null;
   }
 
+  int productQuantity(id) {
+    if (_items.containsKey(id)) {
+      return _items[id]!.quantity;
+    }
+    return 0;
+  }
+
   int get productCount {
     return _items.length;
   }
@@ -66,6 +73,16 @@ class Cart with ChangeNotifier {
           quantity: 1);
     }
     notifyListeners();
+  }
+
+  void undoAdd(String id) {
+    if (_items.containsKey(id)) {
+      _items[id]!.quantity -= 1;
+      if (_items[id]!.quantity == 0) {
+        _items.remove(id);
+      }
+      notifyListeners();
+    }
   }
 
   void remove(String id) {
