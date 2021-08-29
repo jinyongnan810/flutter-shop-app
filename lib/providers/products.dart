@@ -48,6 +48,10 @@ class Products with ChangeNotifier {
     return _items.where((element) => element.isFavorite).toList();
   }
 
+  int get itemCounts {
+    return _items.length;
+  }
+
   // demo of making changes and notify all listeners
   void addProdcut(Product product) {
     _items.add(product);
@@ -62,5 +66,9 @@ class Products with ChangeNotifier {
 
   Product getSingleProduct(String id) {
     return _items.firstWhere((element) => element.id == id);
+  }
+
+  Product atIndex(int index) {
+    return _items[index];
   }
 }
