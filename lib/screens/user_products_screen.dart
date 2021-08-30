@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shop/components/main_drawer.dart';
 import 'package:shop/components/user_product_item.dart';
 import 'package:shop/providers/products.dart';
+import 'package:shop/screens/edit_product_screen.dart';
 
 class UserProductsScreen extends StatelessWidget {
   static final String routeName = '/user/products';
@@ -11,7 +12,13 @@ class UserProductsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Products'),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(EditProductScreen.routeName);
+              },
+              icon: Icon(Icons.add))
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(10),
