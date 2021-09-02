@@ -9,12 +9,30 @@ class EditProductScreen extends StatefulWidget {
 class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _descFocusNode = FocusNode();
+  final _imageUrlController = TextEditingController();
+  final _imageUrlFocusNode = FocusNode();
+
+  void _onImageUrlFocusEvent() {
+    if (!_imageUrlFocusNode.hasFocus) {
+      // makes rebuild ui
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    _imageUrlFocusNode.addListener(_onImageUrlFocusEvent);
+    super.initState();
+  }
 
   @override
   void dispose() {
+    _imageUrlFocusNode.removeListener(_onImageUrlFocusEvent);
     // dispose focusNode to avoid memory leak
     _priceFocusNode.dispose();
     _descFocusNode.dispose();
+    _imageUrlFocusNode.dispose();
+    _imageUrlController.dispose();
     super.dispose();
   }
 
@@ -59,6 +77,32 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   // multiline allows enter, therefore can't use next
                   // textInputAction: TextInputAction.next,
                   focusNode: _descFocusNode,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                        width: 100,
+                        height: 100,
+                        margin: EdgeInsets.only(top: 8, right: 10),
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 1, color: Colors.grey)),
+                        child: _imageUrlController.text.isEmpty
+                            ? Text('Enter a URL')
+                            : FittedBox(
+                                child: Image.network(_imageUrlController.text),
+                                fit: BoxFit.contain)),
+                    // TextFormField has infinite width, have to restrict its width in Row
+                    Expanded(
+                      child: TextFormField(
+                        decoration: InputDecoration(labelText: 'Image:'),
+                        keyboardType: TextInputType.url,
+                        textInputAction: TextInputAction.done,
+                        controller: _imageUrlController,
+                        focusNode: _imageUrlFocusNode,
+                      ),
+                    ),
+                  ],
                 )
               ],
             )),
