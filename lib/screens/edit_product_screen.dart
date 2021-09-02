@@ -9,6 +9,15 @@ class EditProductScreen extends StatefulWidget {
 class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _descFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    // dispose focusNode to avoid memory leak
+    _priceFocusNode.dispose();
+    _descFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
