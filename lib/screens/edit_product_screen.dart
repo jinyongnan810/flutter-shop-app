@@ -1,4 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/providers/product.dart';
+import 'package:shop/providers/products.dart';
 
 class EditProductScreen extends StatefulWidget {
   static final String routeName = '/products/edit';
@@ -11,6 +16,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _descFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
   final _imageUrlFocusNode = FocusNode();
+  final _form = GlobalKey<FormState>();
+  Product _editingProduct =
+      Product(id: '', title: '', description: '', price: 0, image: '');
 
   void _onImageUrlFocusEvent() {
     if (!_imageUrlFocusNode.hasFocus) {
@@ -38,13 +46,29 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final products = Provider.of<Products>(context, listen: false);
+    void onSubmit() {
+      _form.currentState!.save();
+      _editingProduct.id = Random().nextInt(100000).toString();
+      products.addProdcut(_editingProduct);
+      Navigator.of(context).pop();
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Edit Product'),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  onSubmit();
+                },
+                child: Text('Save'))
+          ],
         ),
         body: Padding(
           padding: EdgeInsets.all(8),
           child: Form(
+            key: _form,
             // ListView will remove items not appearing on screen
             // That when we use SingleChildScrollView&Column
             child: SingleChildScrollView(
@@ -60,6 +84,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     // or next icon on keyboard will make the focusNode to be focused
                     FocusScope.of(context).requestFocus(_priceFocusNode);
                   },
+                  onSaved: (value) {
+                    _editingProduct.title = value ?? '';
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Price:'),
@@ -69,6 +96,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_descFocusNode);
                   },
+                  onSaved: (value) {
+                    double? price = value == null ? 0 : double.tryParse(value);
+                    _editingProduct.price = price ?? 0;
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Description:'),
@@ -77,6 +108,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   // multiline allows enter, therefore can't use next
                   // textInputAction: TextInputAction.next,
                   focusNode: _descFocusNode,
+                  onSaved: (value) {
+                    _editingProduct.description = value ?? '';
+                  },
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,6 +134,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         textInputAction: TextInputAction.done,
                         controller: _imageUrlController,
                         focusNode: _imageUrlFocusNode,
+                        onFieldSubmitted: (_) {
+                          onSubmit();
+                        },
+                        onSaved: (value) {
+                          _editingProduct.image = value ?? '';
+                        },
                       ),
                     ),
                   ],
