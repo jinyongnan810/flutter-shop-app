@@ -48,6 +48,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     final products = Provider.of<Products>(context, listen: false);
     void onSubmit() {
+      if (!_form.currentState!.validate()) {
+        return;
+      }
       _form.currentState!.save();
       _editingProduct.id = Random().nextInt(100000).toString();
       products.addProdcut(_editingProduct);
@@ -58,17 +61,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
         appBar: AppBar(
           title: Text('Edit Product'),
           actions: [
-            TextButton(
+            IconButton(
                 onPressed: () {
                   onSubmit();
                 },
-                child: Text('Save'))
+                icon: Icon(Icons.save))
           ],
         ),
         body: Padding(
           padding: EdgeInsets.all(8),
           child: Form(
             key: _form,
+            autovalidateMode: AutovalidateMode.always,
             // ListView will remove items not appearing on screen
             // That when we use SingleChildScrollView&Column
             child: SingleChildScrollView(
@@ -79,6 +83,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   decoration: InputDecoration(labelText: 'Title:'),
                   // keyboard shows next
                   textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter title.';
+                    }
+                    return null;
+                  },
                   onFieldSubmitted: (_) {
                     // press enter on computer
                     // or next icon on keyboard will make the focusNode to be focused
@@ -93,6 +103,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   focusNode: _priceFocusNode,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter Price.';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter valid number';
+                    }
+                    if (double.parse(value) <= 0) {
+                      return 'Please enter a positive number';
+                    }
+                    return null;
+                  },
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_descFocusNode);
                   },
@@ -108,6 +130,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   // multiline allows enter, therefore can't use next
                   // textInputAction: TextInputAction.next,
                   focusNode: _descFocusNode,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter description.';
+                    }
+                    return null;
+                  },
                   onSaved: (value) {
                     _editingProduct.description = value ?? '';
                   },
@@ -134,6 +162,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         textInputAction: TextInputAction.done,
                         controller: _imageUrlController,
                         focusNode: _imageUrlFocusNode,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter image url.';
+                          }
+                          if (!['jpg', 'png']
+                              .any((end) => value.endsWith(end))) {
+                            return 'Please enter an image url';
+                          }
+                          return null;
+                        },
                         onFieldSubmitted: (_) {
                           onSubmit();
                         },
