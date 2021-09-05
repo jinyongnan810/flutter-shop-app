@@ -75,4 +75,9 @@ class Products with ChangeNotifier {
   Product atIndex(int index) {
     return _items[index];
   }
+
+  void deleteProduct(String id) {
+    _items.removeWhere((element) => element.id == id);
+    notifyListeners();
+  }
 }

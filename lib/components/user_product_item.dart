@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/providers/product.dart';
+import 'package:shop/providers/products.dart';
 import 'package:shop/screens/edit_product_screen.dart';
 import 'package:shop/types/page_args.dart';
 
@@ -27,7 +29,32 @@ class UserProductItem extends StatelessWidget {
                 icon: Icon(Icons.edit),
                 color: Theme.of(context).primaryColor),
             IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                bool confirmed = await showDialog(
+                    context: context,
+                    builder: (ctx) {
+                      return AlertDialog(
+                        title: Text('Confirm removing product'),
+                        content: Text("Remove ${_product.title}?"),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop(false);
+                              },
+                              child: Text('No')),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop(true);
+                              },
+                              child: Text('Yes')),
+                        ],
+                      );
+                    });
+                if (confirmed) {
+                  Provider.of<Products>(context, listen: false)
+                      .deleteProduct(_product.id);
+                }
+              },
               icon: Icon(Icons.delete),
               color: Theme.of(context).errorColor,
             ),
