@@ -52,9 +52,13 @@ class Products with ChangeNotifier {
     return _items.length;
   }
 
-  // demo of making changes and notify all listeners
-  void addProdcut(Product product) {
-    _items.add(product);
+  void saveProduct(Product product) {
+    final index = _items.indexWhere((element) => element.id == product.id);
+    if (index == -1) {
+      _items.add(product);
+    } else {
+      _items.replaceRange(index, index + 1, [product]);
+    }
     notifyListeners();
   }
 

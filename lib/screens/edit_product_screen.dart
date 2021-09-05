@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/providers/product.dart';
 import 'package:shop/providers/products.dart';
+import 'package:shop/types/page_args.dart';
 
 class EditProductScreen extends StatefulWidget {
   static final String routeName = '/products/edit';
@@ -12,6 +13,7 @@ class EditProductScreen extends StatefulWidget {
 }
 
 class _EditProductScreenState extends State<EditProductScreen> {
+  bool _isInitialized = false;
   final _priceFocusNode = FocusNode();
   final _descFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
@@ -47,13 +49,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   Widget build(BuildContext context) {
     final products = Provider.of<Products>(context, listen: false);
+    if (!this._isInitialized &&
+        ModalRoute.of(context)!.settings.arguments != null) {
+      // editing mode
+      final args =
+          ModalRoute.of(context)!.settings.arguments as EditUserProductArgs;
+      final product = products.getSingleProduct(args.id);
+      this._editingProduct = product;
+      this._imageUrlController.text = product.image;
+      this._isInitialized = true;
+    }
     void onSubmit() {
       if (!_form.currentState!.validate()) {
         return;
       }
       _form.currentState!.save();
-      _editingProduct.id = Random().nextInt(100000).toString();
-      products.addProdcut(_editingProduct);
+      if (_editingProduct.id == '') {
+        _editingProduct.id = Random().nextInt(100000).toString();
+      }
+      products.saveProduct(_editingProduct);
       Navigator.of(context).pop();
     }
 
@@ -81,6 +95,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
               children: [
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Title:'),
+                  initialValue: _editingProduct.title,
                   // keyboard shows next
                   textInputAction: TextInputAction.next,
                   validator: (value) {
@@ -100,6 +115,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Price:'),
+                  initialValue: _editingProduct.price.toString(),
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   focusNode: _priceFocusNode,
@@ -125,6 +141,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Description:'),
+                  initialValue: _editingProduct.description,
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,
                   // multiline allows enter, therefore can't use next
