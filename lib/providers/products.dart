@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'product.dart';
 
 List<Product> dummyProducts = [
@@ -52,11 +54,22 @@ class Products with ChangeNotifier {
     return _items.length;
   }
 
-  void saveProduct(Product product) {
+  void saveProduct(Product product) async {
     final index = _items.indexWhere((element) => element.id == product.id);
     if (index == -1) {
+      final url = Uri.https(
+          "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
+          '/products.json');
+      final newProduct = await http.post(url, body: jsonEncode(product));
+      final res = jsonDecode(newProduct.body);
+      print(res);
+      product.id = res['name'];
       _items.add(product);
     } else {
+      final url = Uri.https(
+          "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
+          '/products/${product.id}.json');
+      await http.patch(url, body: jsonEncode(product));
       _items.replaceRange(index, index + 1, [product]);
     }
     notifyListeners();

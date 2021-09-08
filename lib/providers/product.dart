@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Product with ChangeNotifier {
   String id;
@@ -14,8 +16,20 @@ class Product with ChangeNotifier {
       required this.price,
       required this.image,
       this.isFavorite = false});
-  toggleFavorite() {
+  toggleFavorite() async {
     this.isFavorite = !this.isFavorite;
+    final url = Uri.https(
+        "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
+        '/products/${this.id}.json');
+    await http.patch(url, body: jsonEncode(this));
     notifyListeners();
   }
+
+  Map<String, dynamic> toJson() => {
+        'title': this.title,
+        'description': this.description,
+        'price': this.price,
+        'image': this.image,
+        'isFavorite': this.isFavorite
+      };
 }
