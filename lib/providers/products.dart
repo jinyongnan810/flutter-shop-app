@@ -54,7 +54,7 @@ class Products with ChangeNotifier {
     return _items.length;
   }
 
-  void saveProduct(Product product) async {
+  Future<void> saveProduct(Product product) async {
     final index = _items.indexWhere((element) => element.id == product.id);
     if (index == -1) {
       final url = Uri.https(
