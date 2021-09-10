@@ -71,11 +71,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
       if (_editingProduct.id == '') {
         _editingProduct.id = Random().nextInt(100000).toString();
       }
-      await products.saveProduct(_editingProduct);
-      setState(() {
-        _isLoading = false;
-      });
-      Navigator.of(context).pop();
+      try {
+        await products.saveProduct(_editingProduct);
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.of(context).pop();
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Error adding the product.Please try again later.'),
+          duration: Duration(seconds: 5),
+        ));
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
 
     return Scaffold(
