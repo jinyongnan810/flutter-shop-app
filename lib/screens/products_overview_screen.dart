@@ -17,8 +17,7 @@ class ProductsOverviewScreen extends StatefulWidget {
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   bool _onlyFavorite = false;
   bool _isLoading = false;
-  @override
-  void initState() {
+  Future<void> _load() async {
     setState(() {
       _isLoading = true;
     });
@@ -36,7 +35,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         });
       }
     });
+  }
 
+  @override
+  void initState() {
+    _load();
     super.initState();
   }
 
@@ -91,7 +94,8 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : ProductGridView(_onlyFavorite),
+          : RefreshIndicator(
+              child: ProductGridView(_onlyFavorite), onRefresh: _load),
       drawer: MainDrawer(),
     );
   }

@@ -20,14 +20,26 @@ class UserProductsScreen extends StatelessWidget {
               icon: Icon(Icons.add))
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Consumer<Products>(
-          builder: (_, products, __) => ListView.builder(
-            itemBuilder: (_, index) => Column(
-              children: [UserProductItem(products.atIndex(index)), Divider()],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          try {
+            await Provider.of<Products>(context, listen: false).loadProducts();
+          } catch (error) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Error loading the product.Please refresh again.'),
+              duration: Duration(seconds: 5),
+            ));
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Consumer<Products>(
+            builder: (_, products, __) => ListView.builder(
+              itemBuilder: (_, index) => Column(
+                children: [UserProductItem(products.atIndex(index)), Divider()],
+              ),
+              itemCount: products.itemCounts,
             ),
-            itemCount: products.itemCounts,
           ),
         ),
       ),
