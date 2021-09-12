@@ -25,6 +25,14 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
+  Product.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        description = json['description'],
+        price = json['price'],
+        image = json['image'],
+        isFavorite = json['isFavorite'],
+        id = '';
+
   Map<String, dynamic> toJson() => {
         'title': this.title,
         'description': this.description,

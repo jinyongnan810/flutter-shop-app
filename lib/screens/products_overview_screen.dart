@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shop/components/badge.dart';
 import 'package:shop/components/main_drawer.dart';
 import 'package:shop/providers/cart.dart';
+import 'package:shop/providers/products.dart';
 import 'package:shop/screens/cart_screen.dart';
 import '../components/product_grid_view.dart';
 
@@ -15,6 +16,30 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   bool _onlyFavorite = false;
+  bool _isLoading = false;
+  @override
+  void initState() {
+    setState(() {
+      _isLoading = true;
+    });
+    Future(() async {
+      try {
+        await Provider.of<Products>(context, listen: false).loadProducts();
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Error loading the product.Please refresh again.'),
+          duration: Duration(seconds: 5),
+        ));
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +87,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       ),
       // so that the appBar doesn't need any state to listen
       // extract the part that do need listen state
-      body: ProductGridView(_onlyFavorite),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductGridView(_onlyFavorite),
       drawer: MainDrawer(),
     );
   }

@@ -41,7 +41,7 @@ List<Product> dummyProducts = [
 // the class with its inheritance class has logical relationship, like human and man
 // while the class with its mixin has no such thing, and the class only uses the mixin for its utility properties
 class Products with ChangeNotifier {
-  List<Product> _items = dummyProducts;
+  List<Product> _items = [];
   List<Product> get items {
     return [..._items];
   }
@@ -52,6 +52,21 @@ class Products with ChangeNotifier {
 
   int get itemCounts {
     return _items.length;
+  }
+
+  Future<void> loadProducts() async {
+    final url = Uri.https(
+        "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
+        '/products.json');
+    final newProduct = await http.get(url);
+    final Map<String, dynamic> res = jsonDecode(newProduct.body);
+    final products = res.entries.map((entry) {
+      final product = Product.fromJson(entry.value);
+      product.id = entry.key;
+      return product;
+    }).toList();
+    this._items = products;
+    notifyListeners();
   }
 
   Future<void> saveProduct(Product product) async {
