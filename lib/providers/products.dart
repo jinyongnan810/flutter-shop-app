@@ -104,7 +104,12 @@ class Products with ChangeNotifier {
     return _items[index];
   }
 
-  void deleteProduct(String id) {
+  Future<void> deleteProduct(String id) async {
+    final url = Uri.https(
+        "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
+        '/products/$id.json');
+
+    await http.delete(url);
     _items.removeWhere((element) => element.id == id);
     notifyListeners();
   }

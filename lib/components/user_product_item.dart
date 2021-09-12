@@ -51,8 +51,16 @@ class UserProductItem extends StatelessWidget {
                       );
                     });
                 if (confirmed) {
-                  Provider.of<Products>(context, listen: false)
-                      .deleteProduct(_product.id);
+                  try {
+                    await Provider.of<Products>(context, listen: false)
+                        .deleteProduct(_product.id);
+                  } catch (error) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          'Error deleting the product.Please try again later.'),
+                      duration: Duration(seconds: 5),
+                    ));
+                  }
                 }
               },
               icon: Icon(Icons.delete),
