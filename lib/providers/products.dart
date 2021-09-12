@@ -108,9 +108,15 @@ class Products with ChangeNotifier {
     final url = Uri.https(
         "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
         '/products/$id.json');
-
-    await http.delete(url);
-    _items.removeWhere((element) => element.id == id);
+    final targetIndex = _items.indexWhere((element) => element.id == id);
+    dynamic target = _items[targetIndex];
+    _items.removeAt(targetIndex);
+    http.delete(url).then((_) {
+      target = null;
+    }).catchError((_) {
+      _items.insert(targetIndex, target);
+      notifyListeners();
+    });
     notifyListeners();
   }
 }

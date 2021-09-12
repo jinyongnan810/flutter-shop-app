@@ -79,7 +79,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         Navigator.of(context).pop();
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Error adding the product.Please try again later.'),
+          content: Text('Error saving the product.Please try again later.'),
           duration: Duration(seconds: 5),
         ));
         setState(() {
