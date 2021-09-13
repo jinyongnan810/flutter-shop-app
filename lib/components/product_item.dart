@@ -31,7 +31,17 @@ class ProductItem extends StatelessWidget {
                 icon: Icon(product.isFavorite
                     ? Icons.favorite
                     : Icons.favorite_border),
-                onPressed: () => product.toggleFavorite(),
+                onPressed: () async {
+                  try {
+                    await product.toggleFavorite();
+                  } catch (_) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          'Error favoriting the product.Please try again later.'),
+                      duration: Duration(seconds: 5),
+                    ));
+                  }
+                },
                 color: Theme.of(context).accentColor,
               ),
               // child is for widgets that need not to rebuild, and can be reference in builder

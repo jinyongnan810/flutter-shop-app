@@ -16,13 +16,17 @@ class Product with ChangeNotifier {
       required this.price,
       required this.image,
       this.isFavorite = false});
-  toggleFavorite() async {
+  Future<http.Response> toggleFavorite() async {
     this.isFavorite = !this.isFavorite;
     final url = Uri.https(
         "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
         '/products/${this.id}.json');
-    await http.patch(url, body: jsonEncode(this));
     notifyListeners();
+    return http.patch(url, body: jsonEncode(this)).catchError((error) {
+      this.isFavorite = !this.isFavorite;
+      notifyListeners();
+      throw error;
+    });
   }
 
   Product.fromJson(Map<String, dynamic> json)
