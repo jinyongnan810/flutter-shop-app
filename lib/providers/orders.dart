@@ -12,8 +12,10 @@ class OrderItemInfo {
       {required this.amount, required this.products, required this.dateTime});
   OrderItemInfo.fromJson(Map<String, dynamic> json)
       : amount = json['amount'],
-        dateTime = json['dateTime'],
-        products = json['products'],
+        dateTime = DateTime.parse(json['dateTime']),
+        products = (json['products'] as List<dynamic>)
+            .map((e) => CartItemInfo.fromJson(e))
+            .toList(),
         id = '';
 
   Map<String, dynamic> toJson() => {
@@ -24,13 +26,30 @@ class OrderItemInfo {
 }
 
 class Orders with ChangeNotifier {
-  final List<OrderItemInfo> _orders = [];
+  List<OrderItemInfo> _orders = [];
   List<OrderItemInfo> get orders {
     return [..._orders];
   }
 
   OrderItemInfo get(int index) {
     return _orders[index];
+  }
+
+  Future<void> load() async {
+    final url = Uri.https(
+        "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
+        '/orders.json');
+    final ordersRes = await http.get(url);
+    print(ordersRes.body);
+    final Map<String, dynamic> res = jsonDecode(ordersRes.body);
+    print(res);
+    final orders = res.entries.map((entry) {
+      final order = OrderItemInfo.fromJson(entry.value);
+      order.id = entry.key;
+      return order;
+    }).toList();
+    this._orders = orders;
+    notifyListeners();
   }
 
   Future<void> add(List<CartItemInfo> cartProducts, double total) async {
