@@ -40,9 +40,7 @@ class Orders with ChangeNotifier {
         "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
         '/orders.json');
     final ordersRes = await http.get(url);
-    print(ordersRes.body);
     final Map<String, dynamic> res = jsonDecode(ordersRes.body);
-    print(res);
     final orders = res.entries.map((entry) {
       final order = OrderItemInfo.fromJson(entry.value);
       order.id = entry.key;
@@ -58,8 +56,6 @@ class Orders with ChangeNotifier {
     final url = Uri.https(
         "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
         '/orders.json');
-    print(jsonEncode(cartProducts));
-    print(jsonEncode(newOrder));
     final newProduct = await http.post(url, body: jsonEncode(newOrder));
     final res = jsonDecode(newProduct.body);
     newOrder.id = res['name'];
