@@ -44,18 +44,7 @@ class CartScreen extends StatelessWidget {
                   SizedBox(
                     width: 20,
                   ),
-                  TextButton(
-                      onPressed: cart.total <= 0
-                          // when onPressed is null, the button will be disabled
-                          ? null
-                          : () {
-                              Provider.of<Orders>(context, listen: false)
-                                  .add(cart.itemsList, cart.total);
-                              cart.clear();
-                              Navigator.of(context)
-                                  .pushReplacementNamed(OrderScreen.routeName);
-                            },
-                      child: Text('Order Now'))
+                  OrderButton(cart: cart)
                 ],
               ),
             ),
@@ -72,5 +61,50 @@ class CartScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+// extracting order button to avoid total re-render
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key? key,
+    required this.cart,
+  }) : super(key: key);
+
+  final Cart cart;
+
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  bool _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: widget.cart.total <= 0
+            // when onPressed is null, the button will be disabled
+            ? null
+            : () async {
+                setState(() {
+                  _isLoading = true;
+                });
+                try {
+                  await Provider.of<Orders>(context, listen: false)
+                      .add(widget.cart.itemsList, widget.cart.total);
+                  widget.cart.clear();
+                  Navigator.of(context)
+                      .pushReplacementNamed(OrderScreen.routeName);
+                } catch (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Error placing the order.Please try again.'),
+                    duration: Duration(seconds: 5),
+                  ));
+                }
+                setState(() {
+                  _isLoading = false;
+                });
+              },
+        child: _isLoading ? CircularProgressIndicator() : Text('Order Now'));
   }
 }
