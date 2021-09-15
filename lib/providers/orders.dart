@@ -40,6 +40,9 @@ class Orders with ChangeNotifier {
         "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
         '/orders.json');
     final ordersRes = await http.get(url);
+    if (jsonDecode(ordersRes.body) == null) {
+      return;
+    }
     final Map<String, dynamic> res = jsonDecode(ordersRes.body);
     final orders = res.entries.map((entry) {
       final order = OrderItemInfo.fromJson(entry.value);

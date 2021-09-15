@@ -58,8 +58,11 @@ class Products with ChangeNotifier {
     final url = Uri.https(
         "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
         '/products.json');
-    final newProduct = await http.get(url);
-    final Map<String, dynamic> res = jsonDecode(newProduct.body);
+    final productsRes = await http.get(url);
+    if (jsonDecode(productsRes.body) == null) {
+      return;
+    }
+    final Map<String, dynamic> res = jsonDecode(productsRes.body);
     final products = res.entries.map((entry) {
       final product = Product.fromJson(entry.value);
       product.id = entry.key;
