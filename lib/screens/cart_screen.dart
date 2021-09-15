@@ -45,13 +45,16 @@ class CartScreen extends StatelessWidget {
                     width: 20,
                   ),
                   TextButton(
-                      onPressed: () {
-                        Provider.of<Orders>(context, listen: false)
-                            .add(cart.itemsList, cart.total);
-                        cart.clear();
-                        Navigator.of(context)
-                            .pushReplacementNamed(OrderScreen.routeName);
-                      },
+                      onPressed: cart.total <= 0
+                          // when onPressed is null, the button will be disabled
+                          ? null
+                          : () {
+                              Provider.of<Orders>(context, listen: false)
+                                  .add(cart.itemsList, cart.total);
+                              cart.clear();
+                              Navigator.of(context)
+                                  .pushReplacementNamed(OrderScreen.routeName);
+                            },
                       child: Text('Order Now'))
                 ],
               ),

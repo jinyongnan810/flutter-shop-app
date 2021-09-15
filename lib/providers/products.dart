@@ -77,7 +77,6 @@ class Products with ChangeNotifier {
           '/products.json');
       final newProduct = await http.post(url, body: jsonEncode(product));
       final res = jsonDecode(newProduct.body);
-      print(res);
       product.id = res['name'];
       _items.add(product);
     } else {

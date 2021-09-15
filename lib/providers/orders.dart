@@ -1,18 +1,26 @@
-import 'dart:math';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shop/providers/cart.dart';
 
 class OrderItemInfo {
-  final String id;
-  final double amount;
-  final List<CartItemInfo> products;
-  final DateTime dateTime;
+  String id = "";
+  double amount;
+  List<CartItemInfo> products;
+  DateTime dateTime;
   OrderItemInfo(
-      {required this.id,
-      required this.amount,
-      required this.products,
-      required this.dateTime});
+      {required this.amount, required this.products, required this.dateTime});
+  OrderItemInfo.fromJson(Map<String, dynamic> json)
+      : amount = json['amount'],
+        dateTime = json['dateTime'],
+        products = json['products'],
+        id = '';
+
+  Map<String, dynamic> toJson() => {
+        'amount': this.amount,
+        'products': this.products,
+        'dateTime': this.dateTime.toIso8601String(),
+      };
 }
 
 class Orders with ChangeNotifier {
@@ -25,12 +33,17 @@ class Orders with ChangeNotifier {
     return _orders[index];
   }
 
-  void add(List<CartItemInfo> cartProducts, double total) {
+  Future<void> add(List<CartItemInfo> cartProducts, double total) async {
     final OrderItemInfo newOrder = OrderItemInfo(
-        id: Random().nextInt(100000).toString(),
-        amount: total,
-        products: cartProducts,
-        dateTime: DateTime.now());
+        amount: total, products: cartProducts, dateTime: DateTime.now());
+    final url = Uri.https(
+        "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
+        '/orders.json');
+    print(jsonEncode(cartProducts));
+    print(jsonEncode(newOrder));
+    final newProduct = await http.post(url, body: jsonEncode(newOrder));
+    final res = jsonDecode(newProduct.body);
+    newOrder.id = res['name'];
     _orders.insert(0, newOrder);
     notifyListeners();
   }
