@@ -4,8 +4,25 @@ import 'package:shop/components/main_drawer.dart';
 import 'package:shop/components/order_item.dart';
 import 'package:shop/providers/orders.dart';
 
-class OrderScreen extends StatelessWidget {
+class OrderScreen extends StatefulWidget {
   static final String routeName = '/orders';
+
+  @override
+  _OrderScreenState createState() => _OrderScreenState();
+}
+
+class _OrderScreenState extends State<OrderScreen> {
+  Future _fetchOrders = Future(() {});
+  Future _getFetchOrdersFuture() {
+    return Provider.of<Orders>(context, listen: false).load();
+  }
+
+  @override
+  void initState() {
+    _fetchOrders = _getFetchOrdersFuture();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // final orderState = Provider.of<Orders>(context);
@@ -14,7 +31,7 @@ class OrderScreen extends StatelessWidget {
         title: Text('Orders'),
       ),
       body: FutureBuilder(
-        future: Provider.of<Orders>(context, listen: false).load(),
+        future: _fetchOrders,
         builder: (ctx, dataSnapshot) {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             return Center(
