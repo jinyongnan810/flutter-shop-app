@@ -29,3 +29,15 @@
 - Edit User Product [Form](https://github.com/jinyongnan810/flutter-shop-app/commit/bf6327de888c6fd057c10744925699a299e8de4b), [Focus form input](https://github.com/jinyongnan810/flutter-shop-app/commit/bfbf69cc356fcf5a4435f56e2d1f50781add7c96), [Multiline Inputs](https://github.com/jinyongnan810/flutter-shop-app/commit/3b925d559a85c2d166cc7f042b5336a446c5765f), [Image Url and Preview](https://github.com/jinyongnan810/flutter-shop-app/commit/c7466e7b55735a7b00a9167f6b41eb89e5b32133) , [Validate](https://github.com/jinyongnan810/flutter-shop-app/commit/9f3fbd1673cf4ab3487b99f436fbb0d5712dc1bf) & [Submit](https://github.com/jinyongnan810/flutter-shop-app/commit/c3824d4945b2d50c737d2ed98803718213d73c1b) form. Finally [Editing product](https://github.com/jinyongnan810/flutter-shop-app/commit/42f7a90673215bb2a4de38149b512c2b85a99232).
 ![image](https://res.cloudinary.com/dsiz9ikkt/image/upload/v1630970970/lurcxlhwwrjekjuxrdbq.png)
 - Use [dispose method](https://github.com/jinyongnan810/flutter-shop-app/commit/168f63191834d58e3dced4dc1d6d9735527a8257) when there are FocusNode or EditTextController
+
+#### Communicate with servers
+- Encode products into json and [save to server](https://github.com/jinyongnan810/flutter-shop-app/commit/27a4c0853261c9a32411a79584698b12657202f0)(rtdb) 
+- [Show spinner](https://github.com/jinyongnan810/flutter-shop-app/commit/7f83eb2d38e86f17f79c12e4310389efecae55f9) during server requests
+- [Catch errors](https://github.com/jinyongnan810/flutter-shop-app/commit/dcced1c2a2761fea1f5f40c3c8f2d3d356608f24) and display notice
+- [Decode products](https://github.com/jinyongnan810/flutter-shop-app/commit/dc5e5217f008df32888f5c6f89aaf33b454a0b8e) json into object
+- [Pull down to refresh](https://github.com/jinyongnan810/flutter-shop-app/commit/4949bac593f543f01ac5426313c3275bb9fb6d41)
+- [Optimistic Update](https://github.com/jinyongnan810/flutter-shop-app/commit/743e9a5c6034504c29fb14d60bc18de30e37827f)
+- [Encode](https://github.com/jinyongnan810/flutter-shop-app/commit/2b3b02390c078c64c99fed474c3b1140da3b45b3) and [Decode](https://github.com/jinyongnan810/flutter-shop-app/commit/c4239845beb456f46de99aabd8016a505071d6e2) nested object
+- [Handle null value](https://github.com/jinyongnan810/flutter-shop-app/commit/24ab3b2507af94302d0076bcea120534d7c3365b)
+- [Partial stateful](https://github.com/jinyongnan810/flutter-shop-app/commit/f4fa10d74b0f3f43a419555e7e6c5c18ff0dcf0c) to prevent total re-render
+- Using [FutureBuilder](https://github.com/jinyongnan810/flutter-shop-app/commit/f4fa10d74b0f3f43a419555e7e6c5c18ff0dcf0c) and [improvement](https://github.com/jinyongnan810/flutter-shop-app/commit/52386a3f5591ad9c0579d4010c9b920df42a1cde)
