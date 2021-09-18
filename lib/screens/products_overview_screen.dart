@@ -10,6 +10,7 @@ import '../components/product_grid_view.dart';
 enum FilterOptions { ONLY_FAVORITES, SHOW_ALL }
 
 class ProductsOverviewScreen extends StatefulWidget {
+  static final String routeName = '/products';
   @override
   _ProductsOverviewScreenState createState() => _ProductsOverviewScreenState();
 }
