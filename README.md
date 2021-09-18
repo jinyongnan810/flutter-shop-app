@@ -41,3 +41,14 @@
 - [Handle null value](https://github.com/jinyongnan810/flutter-shop-app/commit/24ab3b2507af94302d0076bcea120534d7c3365b)
 - [Partial stateful](https://github.com/jinyongnan810/flutter-shop-app/commit/f4fa10d74b0f3f43a419555e7e6c5c18ff0dcf0c) to prevent total re-render
 - Using [FutureBuilder](https://github.com/jinyongnan810/flutter-shop-app/commit/f4fa10d74b0f3f43a419555e7e6c5c18ff0dcf0c) and [improvement](https://github.com/jinyongnan810/flutter-shop-app/commit/52386a3f5591ad9c0579d4010c9b920df42a1cde)
+
+#### Authentication
+- Firebase rtdb rules
+```json
+{
+  "rules": {
+    ".read": "auth !=null",  // 2021-10-8
+    ".write": "auth != null",  // 2021-10-8
+  }
+}
+```
