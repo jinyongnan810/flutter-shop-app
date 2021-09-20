@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -9,7 +10,7 @@ class Auth with ChangeNotifier {
 
   Future<void> signup(String email, String password) async {
     final url = Uri.parse(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAc3P_ldxwMl0RgrChL9iY2P26u2QFliq4");
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${dotenv.env['FIREBASE_API_KEY']}");
     try {
       final signupResponse = await http.post(url,
           headers: {
@@ -32,7 +33,7 @@ class Auth with ChangeNotifier {
 
   Future<void> signin(String email, String password) async {
     final url = Uri.parse(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAc3P_ldxwMl0RgrChL9iY2P26u2QFliq4");
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${dotenv.env['FIREBASE_API_KEY']}");
     try {
       final signupResponse = await http.post(url,
           headers: {
