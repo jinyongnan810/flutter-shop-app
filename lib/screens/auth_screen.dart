@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/models/http_exception.dart';
 import 'package:shop/providers/auth.dart';
 
 enum AuthMode { Signup, Login }
@@ -103,6 +104,19 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
+  void _showErrorDialog(String msg) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: Text('Authenticate Error'),
+              content: Text(msg),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(), child: Text('OK'))
+              ],
+            ));
+  }
+
   void _submit() async {
     if (!_formKey.currentState!.validate()) {
       // Invalid!
@@ -112,13 +126,36 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.Login) {
-      await Provider.of<Auth>(context, listen: false)
-          .signin(_authData['email']!, _authData['password']!);
-    } else {
-      await Provider.of<Auth>(context, listen: false)
-          .signup(_authData['email']!, _authData['password']!);
+    try {
+      if (_authMode == AuthMode.Login) {
+        await Provider.of<Auth>(context, listen: false)
+            .signin(_authData['email']!, _authData['password']!);
+      } else {
+        await Provider.of<Auth>(context, listen: false)
+            .signup(_authData['email']!, _authData['password']!);
+      }
+    } on HttpException catch (error) {
+      String code = error.message;
+      var msg = 'Fail to authenticate you. Please try again later';
+      switch (code) {
+        case 'EMAIL_EXISTS':
+          msg = 'This email has been registered';
+          break;
+        case 'EMAIL_NOT_FOUND':
+          msg = 'This account is not found.';
+          break;
+        case 'INVALID_PASSWORD':
+          msg = 'Invalid password.';
+          break;
+        default:
+          break;
+      }
+      _showErrorDialog(msg);
+    } catch (error) {
+      const msg = 'Fail to authenticate you. Please try again later';
+      _showErrorDialog(msg);
     }
+
     setState(() {
       _isLoading = false;
     });
