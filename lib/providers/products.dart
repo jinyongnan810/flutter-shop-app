@@ -42,6 +42,7 @@ List<Product> dummyProducts = [
 // while the class with its mixin has no such thing, and the class only uses the mixin for its utility properties
 class Products with ChangeNotifier {
   List<Product> _items = [];
+  final String authToken;
   List<Product> get items {
     return [..._items];
   }
@@ -54,10 +55,11 @@ class Products with ChangeNotifier {
     return _items.length;
   }
 
+  Products(this.authToken, this._items);
+
   Future<void> loadProducts() async {
-    final url = Uri.https(
-        "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
-        '/products.json');
+    final url = Uri.parse(
+        "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=${this.authToken}");
     final productsRes = await http.get(url);
     if (jsonDecode(productsRes.body) == null) {
       return;
@@ -75,17 +77,15 @@ class Products with ChangeNotifier {
   Future<void> saveProduct(Product product) async {
     final index = _items.indexWhere((element) => element.id == product.id);
     if (index == -1) {
-      final url = Uri.https(
-          "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
-          '/products.json');
+      final url = Uri.parse(
+          "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=${this.authToken}");
       final newProduct = await http.post(url, body: jsonEncode(product));
       final res = jsonDecode(newProduct.body);
       product.id = res['name'];
       _items.add(product);
     } else {
-      final url = Uri.https(
-          "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
-          '/products/${product.id}.json');
+      final url = Uri.parse(
+          "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/products/${product.id}.json?auth=${this.authToken}");
       await http.patch(url, body: jsonEncode(product));
       _items.replaceRange(index, index + 1, [product]);
     }
@@ -107,9 +107,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String id) async {
-    final url = Uri.https(
-        "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
-        '/products/$id.json');
+    final url = Uri.parse(
+        "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json?auth=${this.authToken}");
     final targetIndex = _items.indexWhere((element) => element.id == id);
     dynamic target = _items[targetIndex];
     _items.removeAt(targetIndex);
