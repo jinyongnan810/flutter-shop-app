@@ -10,6 +10,19 @@ class Auth with ChangeNotifier {
   DateTime? _expiryTime;
   String? _userId;
 
+  bool get isAuth {
+    return token != null;
+  }
+
+  String? get token {
+    if (this._token != null &&
+        this._expiryTime != null &&
+        this._expiryTime!.isAfter(DateTime.now())) {
+      return _token;
+    }
+    return null;
+  }
+
   Future<void> authenticate(String email, String password, Uri uri) async {
     try {
       final signupResponse = await http.post(uri,
@@ -28,7 +41,10 @@ class Auth with ChangeNotifier {
       }
       this._token = authData['idToken'];
       this._userId = authData['localId'];
-      this._expiryTime = DateTime.now().add(Duration(hours: 1));
+      int? expiresIn = int.tryParse(authData['expiresIn']);
+      this._expiryTime =
+          DateTime.now().add(Duration(seconds: expiresIn ?? 3600));
+      notifyListeners();
     } catch (error) {
       throw error;
     }

@@ -136,6 +136,7 @@ class _AuthCardState extends State<AuthCard> {
       }
     } on HttpException catch (error) {
       String code = error.message;
+      print(code);
       var msg = 'Fail to authenticate you. Please try again later';
       switch (code) {
         case 'EMAIL_EXISTS':
@@ -152,6 +153,7 @@ class _AuthCardState extends State<AuthCard> {
       }
       _showErrorDialog(msg);
     } catch (error) {
+      print(error);
       const msg = 'Fail to authenticate you. Please try again later';
       _showErrorDialog(msg);
     }
