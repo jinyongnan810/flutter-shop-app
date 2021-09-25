@@ -18,11 +18,10 @@ class Product with ChangeNotifier {
       required this.price,
       required this.image,
       this.isFavorite = false});
-  Future<void> toggleFavorite() async {
+  Future<void> toggleFavorite(String token) async {
     this.isFavorite = !this.isFavorite;
-    final url = Uri.https(
-        "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
-        '/products/${this.id}.json');
+    final url = Uri.parse(
+        "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/products/${this.id}.json?auth=${token}");
     notifyListeners();
     try {
       final res = await http.patch(url, body: jsonEncode(this));
