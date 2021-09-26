@@ -27,6 +27,10 @@ class OrderItemInfo {
 
 class Orders with ChangeNotifier {
   List<OrderItemInfo> _orders = [];
+  String _authToken;
+
+  Orders(this._authToken, this._orders);
+
   List<OrderItemInfo> get orders {
     return [..._orders];
   }
@@ -36,9 +40,8 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> load() async {
-    final url = Uri.https(
-        "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
-        '/orders.json');
+    final url = Uri.parse(
+        "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json?auth=${this._authToken}");
     final ordersRes = await http.get(url);
     if (jsonDecode(ordersRes.body) == null) {
       return;
@@ -56,9 +59,8 @@ class Orders with ChangeNotifier {
   Future<void> add(List<CartItemInfo> cartProducts, double total) async {
     final OrderItemInfo newOrder = OrderItemInfo(
         amount: total, products: cartProducts, dateTime: DateTime.now());
-    final url = Uri.https(
-        "flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app",
-        '/orders.json');
+    final url = Uri.parse(
+        "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json?auth=${this._authToken}");
     final newProduct = await http.post(url, body: jsonEncode(newOrder));
     final res = jsonDecode(newProduct.body);
     newOrder.id = res['name'];
