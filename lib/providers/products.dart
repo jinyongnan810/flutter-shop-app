@@ -42,7 +42,8 @@ List<Product> dummyProducts = [
 // while the class with its mixin has no such thing, and the class only uses the mixin for its utility properties
 class Products with ChangeNotifier {
   List<Product> _items = [];
-  final String authToken;
+  String authToken;
+  String userId;
   List<Product> get items {
     return [..._items];
   }
@@ -55,7 +56,7 @@ class Products with ChangeNotifier {
     return _items.length;
   }
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this.userId, this._items);
 
   Future<void> loadProducts() async {
     final url = Uri.parse(
@@ -64,10 +65,16 @@ class Products with ChangeNotifier {
     if (jsonDecode(productsRes.body) == null) {
       return;
     }
+    final favoriteUrl = Uri.parse(
+        "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/favorites/${this.userId}.json?auth=${this.authToken}");
+    final favoriteRes = await http.get(favoriteUrl);
+    final favoriteMap = jsonDecode(favoriteRes.body);
     final Map<String, dynamic> res = jsonDecode(productsRes.body);
     final products = res.entries.map((entry) {
       final product = Product.fromJson(entry.value);
       product.id = entry.key;
+      product.isFavorite =
+          favoriteMap == null ? false : favoriteMap[entry.key] ?? false;
       return product;
     }).toList();
     this._items = products;

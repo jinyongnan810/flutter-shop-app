@@ -26,6 +26,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       try {
         await Provider.of<Products>(context, listen: false).loadProducts();
       } catch (error) {
+        print(error);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Error loading the product.Please refresh again.'),
           duration: Duration(seconds: 5),

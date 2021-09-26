@@ -18,16 +18,16 @@ class Product with ChangeNotifier {
       required this.price,
       required this.image,
       this.isFavorite = false});
-  Future<void> toggleFavorite(String token) async {
+  Future<void> toggleFavorite(String token, String userId) async {
     this.isFavorite = !this.isFavorite;
     final url = Uri.parse(
-        "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/products/${this.id}.json?auth=${token}");
+        "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/favorites/${userId}/${this.id}.json?auth=${token}");
     notifyListeners();
     try {
-      final res = await http.patch(url, body: jsonEncode(this));
-      final authData = jsonDecode(res.body);
-      if (authData['error'] != null) {
-        throw HttpException(authData['error']['message']);
+      final res = await http.put(url, body: jsonEncode(this.isFavorite));
+      final favoriteRes = jsonDecode(res.body);
+      if ((favoriteRes is! bool) && favoriteRes['error'] != null) {
+        throw HttpException(favoriteRes['error']['message']);
       }
     } catch (error) {
       this.isFavorite = !this.isFavorite;
@@ -41,7 +41,7 @@ class Product with ChangeNotifier {
         description = json['description'],
         price = json['price'],
         image = json['image'],
-        isFavorite = json['isFavorite'],
+        isFavorite = false,
         id = '';
 
   Map<String, dynamic> toJson() => {
@@ -49,6 +49,5 @@ class Product with ChangeNotifier {
         'description': this.description,
         'price': this.price,
         'image': this.image,
-        'isFavorite': this.isFavorite
       };
 }

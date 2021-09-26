@@ -23,6 +23,10 @@ class Auth with ChangeNotifier {
     return null;
   }
 
+  String? get userId {
+    return _userId;
+  }
+
   Future<void> authenticate(String email, String password, Uri uri) async {
     try {
       final signupResponse = await http.post(uri,
