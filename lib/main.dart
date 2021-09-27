@@ -14,7 +14,7 @@ import './screens/products_overview_screen.dart';
 import './providers/products.dart';
 
 Future<void> main() async {
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "assets/.env");
   runApp(MyApp());
 }
 
