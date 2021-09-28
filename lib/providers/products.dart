@@ -71,7 +71,7 @@ class Products with ChangeNotifier {
         "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/favorites/${this.userId}.json?auth=${this.authToken}");
     final favoriteRes = await http.get(favoriteUrl);
     final favoriteMap = jsonDecode(favoriteRes.body);
-    print(productsRes.body);
+    // print(productsRes.body);
     final Map<String, dynamic> res = jsonDecode(productsRes.body);
     final products = res.entries.map((entry) {
       final product = Product.fromJson(entry.value);
