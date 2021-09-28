@@ -6,9 +6,9 @@ import 'dart:convert';
 import 'package:shop/models/http_exception.dart';
 
 class Auth with ChangeNotifier {
-  String? _token;
+  String? _token = '';
   DateTime? _expiryTime;
-  String? _userId;
+  String? _userId = '';
 
   bool get isAuth {
     return token != null;
@@ -64,5 +64,13 @@ class Auth with ChangeNotifier {
     final uri = Uri.parse(
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${dotenv.env['FIREBASE_API_KEY']}");
     await authenticate(email, password, uri);
+  }
+
+  void logout() {
+    print('logout');
+    this._token = null;
+    this._userId = null;
+    this._expiryTime = null;
+    notifyListeners();
   }
 }
