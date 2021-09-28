@@ -58,9 +58,11 @@ class Products with ChangeNotifier {
 
   Products(this.authToken, this.userId, this._items);
 
-  Future<void> loadProducts() async {
-    final url = Uri.parse(
-        "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=${this.authToken}");
+  Future<void> loadProducts([bool filterMyOwn = false]) async {
+    final urlString = filterMyOwn
+        ? 'https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=${this.authToken}&orderBy="creatorId"&equalTo="${this.userId}"'
+        : 'https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=${this.authToken}';
+    final url = Uri.parse(urlString);
     final productsRes = await http.get(url);
     if (jsonDecode(productsRes.body) == null) {
       return;
@@ -69,6 +71,7 @@ class Products with ChangeNotifier {
         "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/favorites/${this.userId}.json?auth=${this.authToken}");
     final favoriteRes = await http.get(favoriteUrl);
     final favoriteMap = jsonDecode(favoriteRes.body);
+    print(productsRes.body);
     final Map<String, dynamic> res = jsonDecode(productsRes.body);
     final products = res.entries.map((entry) {
       final product = Product.fromJson(entry.value);
@@ -86,6 +89,7 @@ class Products with ChangeNotifier {
     if (index == -1) {
       final url = Uri.parse(
           "https://flutter-learning-36b57-default-rtdb.asia-southeast1.firebasedatabase.app/products.json?auth=${this.authToken}");
+      product.creatorId = this.userId;
       final newProduct = await http.post(url, body: jsonEncode(product));
       final res = jsonDecode(newProduct.body);
       product.id = res['name'];

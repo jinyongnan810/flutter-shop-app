@@ -49,6 +49,9 @@
   "rules": {
     ".read": "auth !=null",  // 2021-10-8
     ".write": "auth != null",  // 2021-10-8
+    "products":{
+      ".indexOn":["creatorId"]
+		}
   }
 }
 ```

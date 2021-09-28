@@ -6,6 +6,7 @@ import 'package:shop/models/http_exception.dart';
 
 class Product with ChangeNotifier {
   String id;
+  String creatorId;
   String title;
   String description;
   double price;
@@ -17,7 +18,8 @@ class Product with ChangeNotifier {
       required this.description,
       required this.price,
       required this.image,
-      this.isFavorite = false});
+      this.isFavorite = false,
+      this.creatorId = ''});
   Future<void> toggleFavorite(String token, String userId) async {
     this.isFavorite = !this.isFavorite;
     final url = Uri.parse(
@@ -39,15 +41,17 @@ class Product with ChangeNotifier {
   Product.fromJson(Map<String, dynamic> json)
       : title = json['title'],
         description = json['description'],
-        price = json['price'],
+        price = double.parse(json['price'].toString()),
         image = json['image'],
         isFavorite = false,
-        id = '';
+        id = '',
+        creatorId = json['creatorId'];
 
   Map<String, dynamic> toJson() => {
         'title': this.title,
         'description': this.description,
         'price': this.price,
         'image': this.image,
+        'creatorId': this.creatorId,
       };
 }
