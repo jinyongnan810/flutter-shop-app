@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import 'package:shop/models/http_exception.dart';
@@ -14,6 +15,7 @@ class Auth with ChangeNotifier {
   Timer? _authTimer;
 
   bool get isAuth {
+    print('isAuth:${token != null}');
     return token != null;
   }
 
@@ -53,9 +55,36 @@ class Auth with ChangeNotifier {
           DateTime.now().add(Duration(seconds: expiresIn ?? 3600));
       autoLogout();
       notifyListeners();
+      final prefs = await SharedPreferences.getInstance();
+      final userData = jsonEncode({
+        'token': this._token,
+        'userId': this._userId,
+        'expiryTime': this._expiryTime!.toIso8601String()
+      });
+      prefs.setString('auth', userData);
     } catch (error) {
       throw error;
     }
+  }
+
+  Future<bool> autoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('auth')) {
+      return false;
+    }
+    final auth = prefs.getString('auth');
+    final userData = jsonDecode(auth!);
+    final expiryTime = DateTime.parse(userData['expiryTime']);
+    if (expiryTime.isBefore(DateTime.now())) {
+      return false;
+    }
+    this._token = userData['token'];
+    this._userId = userData['userId'];
+    this._expiryTime = expiryTime;
+    print('auth login success');
+    autoLogout();
+    notifyListeners();
+    return true;
   }
 
   Future<void> signup(String email, String password) async {
@@ -70,7 +99,7 @@ class Auth with ChangeNotifier {
     await authenticate(email, password, uri);
   }
 
-  void logout() {
+  Future<void> logout() async {
     print('logout');
     this._token = null;
     this._userId = null;
@@ -79,6 +108,8 @@ class Auth with ChangeNotifier {
       this._authTimer!.cancel();
       this._authTimer = null;
     }
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
     notifyListeners();
   }
 
