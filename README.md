@@ -55,3 +55,13 @@
   }
 }
 ```
+- Use [env](https://github.com/jinyongnan810/flutter-shop-app/commit/9a966d220541f479803864f8956281c0079b9190). Sometimes [this works](https://github.com/jinyongnan810/flutter-shop-app/commit/8187d58ddde4e6d84f8a47aaa53e4af483603247)
+- Authentication [Form](https://github.com/jinyongnan810/flutter-shop-app/commit/a2dd510e013d6e5b3dfcb975ae7b99d32a64cba7)
+![image](https://res.cloudinary.com/dsiz9ikkt/image/upload/v1633039797/ycft6t4yriwc2uajzto9.png)
+- [Sign up & Login](https://github.com/jinyongnan810/flutter-shop-app/commit/b660d4dfb29fff0318a70df5a8f65a292fe568e6)
+- Handle authentication [errors](https://github.com/jinyongnan810/flutter-shop-app/commit/aeea8a6c7c98c09a06e54c6ba7d68aa327019b4d)
+- [Auth State](https://github.com/jinyongnan810/flutter-shop-app/commit/d3041fc58fd8b6d5459f0d5bb8fb506e14d52b77)
+- Use [ProxyProvider](https://github.com/jinyongnan810/flutter-shop-app/commit/e451c29c1e3ecb8d76a0da712a464fb46396ed62) to get states from other provider
+- Scope [favorites](https://github.com/jinyongnan810/flutter-shop-app/commit/1634bcff871c510ea0088d8fac38601401561f0a), [Products](https://github.com/jinyongnan810/flutter-shop-app/commit/8d05a53b183c39f488adfc6f74224904bf3a8313), [Orders](https://github.com/jinyongnan810/flutter-shop-app/commit/9e29d616629fa78bda93409a99a099171072de44) to user.
+- [Logout](https://github.com/jinyongnan810/flutter-shop-app/commit/72d843bdf4f3cda8e700dec3c2ff419caf843c72) and [Auto-logout using timer](https://github.com/jinyongnan810/flutter-shop-app/commit/fda10f82a3aa762f7774c13968425e90397c08f1)
+- Auto-login with [sharedPreferences](https://github.com/jinyongnan810/flutter-shop-app/commit/dc14e84ced2e5f56614ca556f578e24cc3f6eff1)
