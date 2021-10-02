@@ -104,18 +104,18 @@ class _AuthCardState extends State<AuthCard>
   };
   var _isLoading = false;
   final _passwordController = TextEditingController();
-  AnimationController? animationContoller;
-  Animation<Size>? sizeAnimation;
+  // AnimationController? animationContoller;
+  // Animation<Size>? sizeAnimation;
 
   @override
   void initState() {
-    animationContoller =
-        // vsync to show animation only on visible components
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    sizeAnimation = Tween<Size>(
-            begin: Size(double.infinity, 260), end: Size(double.infinity, 320))
-        .animate(CurvedAnimation(
-            parent: animationContoller!, curve: Curves.fastOutSlowIn));
+    // vsync to show animation only on visible components
+    // animationContoller =
+    //     AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    // sizeAnimation = Tween<Size>(
+    //         begin: Size(double.infinity, 260), end: Size(double.infinity, 320))
+    //     .animate(CurvedAnimation(
+    //         parent: animationContoller!, curve: Curves.fastOutSlowIn));
     // sizeAnimation!.addListener(() {
     //   setState(() {});
     // });
@@ -125,7 +125,7 @@ class _AuthCardState extends State<AuthCard>
   @override
   void dispose() {
     super.dispose();
-    animationContoller!.dispose();
+    // animationContoller!.dispose();
   }
 
   void _showErrorDialog(String msg) {
@@ -192,13 +192,13 @@ class _AuthCardState extends State<AuthCard>
       setState(() {
         _authMode = AuthMode.Signup;
         // execute animations
-        animationContoller!.forward();
+        // animationContoller!.forward();
       });
     } else {
       setState(() {
         _authMode = AuthMode.Login;
         // reverse animations
-        animationContoller!.reverse();
+        // animationContoller!.reverse();
       });
     }
   }
@@ -211,17 +211,15 @@ class _AuthCardState extends State<AuthCard>
           borderRadius: BorderRadius.circular(10.0),
         ),
         elevation: 8.0,
-        child: AnimatedBuilder(
-          animation: sizeAnimation!,
-          builder: (ctx, child) => Container(
-              // height: _authMode == AuthMode.Signup ? 320 : 260,
-              height: sizeAnimation!.value.height,
-              constraints:
-                  BoxConstraints(minHeight: sizeAnimation!.value.height),
-              width: deviceSize.width * 0.75,
-              padding: EdgeInsets.all(16.0),
-              child: child),
-          // child for those don't need rerender
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeIn,
+          height: _authMode == AuthMode.Signup ? 320 : 260,
+          // height: sizeAnimation!.value.height,
+          constraints: BoxConstraints(
+              minHeight: _authMode == AuthMode.Signup ? 320 : 260),
+          width: deviceSize.width * 0.75,
+          padding: EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
