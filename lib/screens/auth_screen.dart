@@ -94,7 +94,8 @@ class AuthCard extends StatefulWidget {
   _AuthCardState createState() => _AuthCardState();
 }
 
-class _AuthCardState extends State<AuthCard> {
+class _AuthCardState extends State<AuthCard>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.Login;
   Map<String, String> _authData = {
@@ -103,6 +104,29 @@ class _AuthCardState extends State<AuthCard> {
   };
   var _isLoading = false;
   final _passwordController = TextEditingController();
+  AnimationController? animationContoller;
+  Animation<Size>? sizeAnimation;
+
+  @override
+  void initState() {
+    animationContoller =
+        // vsync to show animation only on visible components
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    sizeAnimation = Tween<Size>(
+            begin: Size(double.infinity, 260), end: Size(double.infinity, 320))
+        .animate(CurvedAnimation(
+            parent: animationContoller!, curve: Curves.fastOutSlowIn));
+    sizeAnimation!.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    animationContoller!.dispose();
+  }
 
   void _showErrorDialog(String msg) {
     showDialog(
@@ -167,10 +191,14 @@ class _AuthCardState extends State<AuthCard> {
     if (_authMode == AuthMode.Login) {
       setState(() {
         _authMode = AuthMode.Signup;
+        // execute animations
+        animationContoller!.forward();
       });
     } else {
       setState(() {
         _authMode = AuthMode.Login;
+        // reverse animations
+        animationContoller!.reverse();
       });
     }
   }
@@ -184,9 +212,9 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: _authMode == AuthMode.Signup ? 320 : 260,
-        constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
+        // height: _authMode == AuthMode.Signup ? 320 : 260,
+        height: sizeAnimation!.value.height,
+        constraints: BoxConstraints(minHeight: sizeAnimation!.value.height),
         width: deviceSize.width * 0.75,
         padding: EdgeInsets.all(16.0),
         child: Form(
