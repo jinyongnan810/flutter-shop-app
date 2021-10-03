@@ -104,14 +104,15 @@ class _AuthCardState extends State<AuthCard>
   };
   var _isLoading = false;
   final _passwordController = TextEditingController();
-  // AnimationController? animationContoller;
+  AnimationController? animationContoller;
   // Animation<Size>? sizeAnimation;
+  Animation<double>? opacityAnimation;
 
   @override
   void initState() {
     // vsync to show animation only on visible components
-    // animationContoller =
-    //     AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    animationContoller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     // sizeAnimation = Tween<Size>(
     //         begin: Size(double.infinity, 260), end: Size(double.infinity, 320))
     //     .animate(CurvedAnimation(
@@ -119,6 +120,8 @@ class _AuthCardState extends State<AuthCard>
     // sizeAnimation!.addListener(() {
     //   setState(() {});
     // });
+    opacityAnimation = Tween<double>(begin: 0, end: 1).animate(
+        CurvedAnimation(parent: animationContoller!, curve: Curves.easeIn));
     super.initState();
   }
 
@@ -192,13 +195,13 @@ class _AuthCardState extends State<AuthCard>
       setState(() {
         _authMode = AuthMode.Signup;
         // execute animations
-        // animationContoller!.forward();
+        animationContoller!.forward();
       });
     } else {
       setState(() {
         _authMode = AuthMode.Login;
         // reverse animations
-        // animationContoller!.reverse();
+        animationContoller!.reverse();
       });
     }
   }
@@ -253,8 +256,9 @@ class _AuthCardState extends State<AuthCard>
                       _authData['password'] = value ?? '';
                     },
                   ),
-                  if (_authMode == AuthMode.Signup)
-                    TextFormField(
+                  FadeTransition(
+                    opacity: opacityAnimation!,
+                    child: TextFormField(
                       enabled: _authMode == AuthMode.Signup,
                       decoration:
                           InputDecoration(labelText: 'Confirm Password'),
@@ -267,6 +271,7 @@ class _AuthCardState extends State<AuthCard>
                             }
                           : null,
                     ),
+                  ),
                   SizedBox(
                     height: 20,
                   ),
