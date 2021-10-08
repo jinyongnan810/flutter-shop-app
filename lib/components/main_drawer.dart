@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/helpers/custom_route.dart';
 import 'package:shop/providers/auth.dart';
 import 'package:shop/screens/orders_screen.dart';
 import 'package:shop/screens/user_products_screen.dart';
@@ -26,7 +27,9 @@ class MainDrawer extends StatelessWidget {
             leading: Icon(Icons.history),
             title: Text('Orders'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(OrderScreen.routeName);
+              // Navigator.of(context).pushReplacementNamed(OrderScreen.routeName);
+              Navigator.of(context).pushReplacement(
+                  CustomRoute(builder: (ctx) => OrderScreen()));
             },
           ),
           ListTile(
