@@ -65,3 +65,14 @@
 - Scope [favorites](https://github.com/jinyongnan810/flutter-shop-app/commit/1634bcff871c510ea0088d8fac38601401561f0a), [Products](https://github.com/jinyongnan810/flutter-shop-app/commit/8d05a53b183c39f488adfc6f74224904bf3a8313), [Orders](https://github.com/jinyongnan810/flutter-shop-app/commit/9e29d616629fa78bda93409a99a099171072de44) to user.
 - [Logout](https://github.com/jinyongnan810/flutter-shop-app/commit/72d843bdf4f3cda8e700dec3c2ff419caf843c72) and [Auto-logout using timer](https://github.com/jinyongnan810/flutter-shop-app/commit/fda10f82a3aa762f7774c13968425e90397c08f1)
 - Auto-login with [sharedPreferences](https://github.com/jinyongnan810/flutter-shop-app/commit/dc14e84ced2e5f56614ca556f578e24cc3f6eff1)
+
+#### Animation
+- [Basic way](https://github.com/jinyongnan810/flutter-shop-app/commit/32788049fcb47a2e4c61cbd505921bca33d125e6) to add an animation
+- Using [AnimationBuilder](https://github.com/jinyongnan810/flutter-shop-app/commit/c47a5cf608f74e870a27c2cdc03b279dc15290b9)
+- Using [AnimatedContainer](https://github.com/jinyongnan810/flutter-shop-app/commit/ffce055713fb97ba160044a27c6f2d8265afd7e8) & [Nested Version](https://github.com/jinyongnan810/flutter-shop-app/commit/fabd604ff8205e8781e91aa20f2ac8664b20c4d3)
+- [Fade](https://github.com/jinyongnan810/flutter-shop-app/commit/4cc7150846a29f7fb93ae2d6f260235d1730925d) animation & [Slide](https://github.com/jinyongnan810/flutter-shop-app/commit/d97aad0a34ac7de32f480875edd6077b1aaa0730) animation
+- Image [PlaceHolder](https://github.com/jinyongnan810/flutter-shop-app/commit/c40278718d204de1a2b21fd90d62733dc77e82d8)
+- Image [Hero](https://github.com/jinyongnan810/flutter-shop-app/commit/1816c2e573d1bda9970accd98f1bfe8ea0f88abe) animation
+- [Sliver AppBar](https://github.com/jinyongnan810/flutter-shop-app/commit/0d495d39adc8817cd4e7101a40f8384c2244defb)
+- Use [Custom PageRoute](https://github.com/jinyongnan810/flutter-shop-app/commit/92078c76872abf10a72469251c52a65909d213a4) to change page transition effect
+- Apply custom transition effect to all pages using [Custom PageTransitionBuilder](https://github.com/jinyongnan810/flutter-shop-app/commit/6627b04374d1b0b071bb525f635f93e361122f29)
